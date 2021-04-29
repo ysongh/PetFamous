@@ -2,12 +2,14 @@
   "name": "petfamous",
   "version": "0.1.0",
   "private": true,
+  "homepage": ".",
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build"
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "skynet-js": "^4.0.1-beta",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"
