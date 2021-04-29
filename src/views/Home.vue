@@ -29,7 +29,6 @@ export default {
   },
   async created() {
     try {
-      console.log(this.privateKey)
       const { data, skylink } = await this.skynetClient.db.getJSON(this.publicKey, dataKey);
       console.log(data, skylink);
     } catch (error) {
