@@ -7,23 +7,20 @@
 
 <script>
 // @ is an alias to /src
-import { SkynetClient, genKeyPairFromSeed } from "skynet-js";
-import { seedphase } from '../config';
+import { mapState } from 'vuex';
 
-const portal = 'https://siasky.net/';
-const client = new SkynetClient(portal);
-const { privateKey, publicKey } = genKeyPairFromSeed(seedphase);
-const dataKey = "localhost";
+import { dataKey } from '../config';
 
 export default {
   name: 'Home',
+  computed: mapState(['skynetClient', 'privateKey', 'publicKey']),
   methods: {
     async setJSONFromSkyDB(){
       try {
         const json = {
-          message: "It works"
+          message: "Hello"
         };
-        const { data, skylink } = await client.db.setJSON(privateKey, dataKey, json);
+        const { data, skylink } = await this.skynetClient.db.setJSON(this.privateKey, dataKey, json);
         console.log(data, skylink);
       } catch (error) {
         console.log(error);
@@ -32,7 +29,8 @@ export default {
   },
   async created() {
     try {
-      const { data, skylink } = await client.db.getJSON(publicKey, dataKey);
+      console.log(this.privateKey)
+      const { data, skylink } = await this.skynetClient.db.getJSON(this.publicKey, dataKey);
       console.log(data, skylink);
     } catch (error) {
       console.log(error);
