@@ -1,14 +1,33 @@
 <template>
-  <div class="">
-    <h1>Create Pet</h1>
-    <input
-      type="text"
-      placeholder="Owner Name"
-      v-model="ownerName">
-    <input type="file" @change="getFile">
-    <label>{{fileName}}</label>
-    <button @click="addPetToSkyDB">Create</button>
-    <img :src="imageURL" alt="Photo">
+  <div class="container">
+    <div class="card m-auto">
+      <h2 class="card-header text-center py-4">Add photo of your pet</h2>
+      
+      <form class="card-body px-5" @submit="addPetToSkyDB">
+        <div class="form-group">
+          <label class="font-weight-bold">Owner Name</label>
+          <input
+            class="form-control"
+            type="text"
+            name="Owner Name"
+            v-model="ownerName">
+        </div>
+
+        <div class="form-group">
+          <label class="font-weight-bold">Image</label>
+          <div class="input-group">
+            <div class="custom-file">
+              <input type="file" class="custom-file-input" @change="getFile">
+              <label class="custom-file-label">{{fileName}}</label>
+            </div>
+          </div>
+        </div>
+
+         <img :src="imageURL" alt="Photo">
+
+        <input type="submit" value="Add" class="btn btn-primary primary-bg-color btn-block btn-lg">
+      </form>
+    </div>
   </div>
 </template>
 
@@ -39,8 +58,10 @@ export default {
       const skylinkUrl = await this.skynetClient.getSkylinkUrl(skylink);
       this.imageURL = skylinkUrl;
     },
-    async addPetToSkyDB() {
+    async addPetToSkyDB(e) {
       try {
+        e.preventDefault();
+        
         let { data, skylink } = await this.skynetClient.db.getJSON(this.publicKey, dataKey);
         console.log(data, skylink);
 
@@ -70,6 +91,7 @@ export default {
 
         const res = await this.skynetClient.db.setJSON(this.privateKey, dataKey, json);
         console.log(res);
+        this.$router.push('/');
       } catch (error) {
         console.log(error);
       }
@@ -77,3 +99,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .card{
+    max-width: 500px !important;
+    margin-top: 3rem !important;
+  }
+</style>

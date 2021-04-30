@@ -1,11 +1,17 @@
 <template>
-  <div class="home">
+  <div class="container">
     <h1>Pet Famous</h1>
-    <button @click="setJSONFromSkyDB()">Set Data</button>
-    <div :key="pet.id" v-for="pet in this.pets">
-      <h2>{{pet.ownerName}}</h2>
-      <img :src="pet.imageURL" alt="Pet">
+
+    <div class="card-columns">
+      <div class="card" :key="pet.id" v-for="pet in this.pets">
+        <img class="card-img-top" :src="pet.imageURL" alt="Pet">
+        <div class="card-body">
+          <h5 class="card-title">{{pet.ownerName}}</h5>
+          <a href="#" class="btn btn-primary">View</a>
+        </div>
+      </div>
     </div>
+    
   </div>
 </template>
 
@@ -21,20 +27,6 @@ export default {
     pets: []
   }),
   computed: mapState(['skynetClient', 'privateKey', 'publicKey']),
-  methods: {
-    async setJSONFromSkyDB(){
-      try {
-        const json = {
-          message: "Hello"
-        };
-        const { data, skylink } = await this.skynetClient.db.setJSON(this.privateKey, dataKey, json);
-        console.log(data, skylink);
-        
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  },
   async created() {
     try {
       const { data, skylink } = await this.skynetClient.db.getJSON(this.publicKey, dataKey);
