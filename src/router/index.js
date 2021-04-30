@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
-import CreatePet from '../views/CreatePet.vue'
 
 const routes = [
   {
@@ -20,6 +19,11 @@ const routes = [
     path: '/create-pet',
     name: 'Create Pet',
     component: () => import('../views/CreatePet.vue')
+  },
+  {
+    path: '/pet/:id',
+    name: 'Pet Detail',
+    component: () => import('../views/PetDetail.vue')
   }
 ]
 

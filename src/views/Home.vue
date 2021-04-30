@@ -7,7 +7,9 @@
         <img class="card-img-top" :src="pet.imageURL" alt="Pet">
         <div class="card-body">
           <h5 class="card-title">{{pet.ownerName}}</h5>
-          <a href="#" class="btn btn-primary">View</a>
+          <router-link class="btn btn-primary" :to="{ path: '/pet/'+ pet.id}">
+            View
+          </router-link>
         </div>
       </div>
     </div>
