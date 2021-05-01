@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <h1>Pet Detail</h1>
-		<img class="img-fluid" v-show="this.pet.imageURL" :src="this.pet.imageURL" alt="Pet">
-		<p>{{this.pet.ownerName}}</p>
+    <img class="img-fluid" v-show="this.pet.imageURL" :src="this.pet.imageURL" alt="Pet">
+    <p>{{this.pet.ownerName}}</p>
   </div>
 </template>
 

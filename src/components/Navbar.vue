@@ -10,7 +10,7 @@
           <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
+        <ul class="navbar-nav mr-auto">
           <li class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show">
             <router-link class="nav-link" to="/">Home</router-link>
           </li>
@@ -21,13 +21,29 @@
             <router-link class="nav-link" to="/create-pet">Create Pet</router-link>
           </li>
         </ul>
+        <ul class="navbar-nav">
+          <li v-if="!this.userID" class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show">
+            <span class="nav-link" @click="this.handleMySkyLogin()">Login</span>
+          </li>
+          <li v-else class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show">
+            <span class="nav-link" @click="this.handleMySkyLogout()">Logout</span>
+          </li>
+        </ul>
       </div>
     </div>
   </nav>
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
+
 export default {
-    name: 'Navbar'
+  name: 'Navbar',
+  computed: mapGetters(['userID', 'mySky']),
+  methods: mapActions(['initMySky', 'handleMySkyLogin', 'handleMySkyLogout']),
+  async created() {
+    await this.initMySky();
+    console.log(this.userID, "userID");
+  }
 }
 </script>
