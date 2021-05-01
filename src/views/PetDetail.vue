@@ -2,7 +2,8 @@
   <div class="container">
     <h1>Pet Detail</h1>
     <img class="img-fluid" v-show="this.pet.imageURL" :src="this.pet.imageURL" alt="Pet">
-    <p>{{this.pet.ownerName}}</p>
+    <p>{{this.pet.type}}</p>
+    <p>Owner {{this.pet.ownerName}}</p>
   </div>
 </template>
 

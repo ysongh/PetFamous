@@ -14,6 +14,18 @@
         </div>
 
         <div class="form-group">
+          <label class="font-weight-bold">Type</label>
+          <select class="custom-select"  v-model="type" @change={type}>
+              <option>None</option>
+              <option value="Dog">Dog</option>
+              <option value="Cat">Cat</option>
+              <option value="Bird">Bird</option>
+              <option value="Fish">Fish</option>
+              <option value="Other">Other</option>
+          </select>
+        </div>
+
+        <div class="form-group">
           <label class="font-weight-bold">Image</label>
           <div class="input-group">
             <div class="custom-file">
@@ -23,7 +35,7 @@
           </div>
         </div>
 
-         <img :src="imageURL" alt="Photo">
+         <img class="img-fluid mb-3" :src="imageURL" alt="Photo">
 
         <input type="submit" value="Add" class="btn btn-primary primary-bg-color btn-block btn-lg">
       </form>
@@ -40,6 +52,7 @@ export default {
   name: 'CreatePet',
   data: () => ({
     ownerName: '',
+    type: '',
     file: null,
     fileName: '',
     imageURL: ''
@@ -68,6 +81,7 @@ export default {
         const petData = {
           id: data?.petCount || 0,
           ownerName: this.ownerName,
+          type: this.type,
           imageURL: this.imageURL,
           likes: [],
         }

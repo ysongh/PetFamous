@@ -5,7 +5,7 @@ import { seedphase } from '../config';
 const portal = 'https://siasky.net/';
 const client = new SkynetClient(portal);
 const { privateKey, publicKey } = genKeyPairFromSeed(seedphase);
-//const dataDomain = window.location.hostname;
+const dataDomain = window.location.hostname;
 const hostApp = "host-app.hns";
 
 export default createStore({
@@ -23,7 +23,7 @@ export default createStore({
   actions: {
     async initMySky({ commit }) {
       try {
-        const mySky = await client.loadMySky(hostApp);
+        const mySky = await client.loadMySky(dataDomain);
         const loggedIn = await mySky.checkLogin();
 
         commit('setMySky', mySky);

@@ -6,7 +6,7 @@
       <div class="card" :key="pet.id" v-for="pet in this.pets">
         <img class="card-img-top" :src="pet.imageURL" alt="Pet">
         <div class="card-body">
-          <h5 class="card-title">{{pet.ownerName}}</h5>
+          <h5 class="card-title">{{pet.ownerName}} ({{pet.type}})</h5>
           <router-link class="btn btn-primary" :to="{ path: '/pet/'+ pet.id}">
             View
           </router-link>
