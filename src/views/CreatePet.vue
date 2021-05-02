@@ -79,7 +79,7 @@ export default {
         console.log(data, skylink);
 
         const petData = {
-          id: data?.petCount || 0,
+          id: data?.pets.length || 0,
           ownerName: this.ownerName,
           type: this.type,
           imageURL: this.imageURL,
@@ -91,6 +91,7 @@ export default {
         if(data === null) {
           json = {
             pets: [petData],
+            comments: [],
             petCount: 0
           };
         }
@@ -99,6 +100,7 @@ export default {
 
           json = {
             pets: data.pets,
+            comments: data.comments,
             petCount: data.petCount + 1
           };
         }

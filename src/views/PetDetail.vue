@@ -1,22 +1,49 @@
 <template>
   <div class="container">
+
     <div v-show="error" class="alert alert-danger" data-dismiss="alert" role="alert">
       {{error}}
       <button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
     </div>
-    <h1>Pet Detail</h1>
-    <img class="img-fluid" v-show="this.pet.imageURL" :src="this.pet.imageURL" alt="Pet">
-    <p>{{this.pet.type}}</p>
-    <p>Owner {{this.pet.ownerName}}</p>
-    <button class="btn btn-info" @click="likeAPetToSkyDB">{{numberOfLikes}} Likes</button>
-    <div class="my-2"></div>
-    <button v-if="!account" class="btn btn-primary" @click="loadWeb3">
-      Connect to Wallet to mint NFT
-    </button>
-    <button v-else class="btn btn-primary" @click="mintPetNFT">Mint this Pet NFT</button>
-    <p class="mt-3">{{transactionHash}}</p>
+
+     <h1>Pet Detail</h1>
+
+    <div class="row">
+      <div class="col-sm-12 col-md-6">
+        <img class="img-fluid" v-show="this.pet.imageURL" :src="this.pet.imageURL" alt="Pet">
+        <p>{{this.pet.type}}</p>
+        <p>Owner {{this.pet.ownerName}}</p>
+        <button class="btn btn-info" @click="likeAPetToSkyDB">{{numberOfLikes}} Likes</button>
+        <div class="my-2"></div>
+        <button v-if="!account" class="btn btn-primary" @click="loadWeb3">
+          Connect to Wallet to mint NFT
+        </button>
+        <button v-else class="btn btn-primary" @click="mintPetNFT">Mint this Pet NFT</button>
+        <p class="mt-3">{{transactionHash}}</p>
+      </div>
+       <div class="col-sm-12 col-md-6">
+         <div class="form-group">
+          <label class="font-weight-bold">Comment</label>
+          <textarea
+            class="form-control"
+            type="text"
+            name="comment"
+            rows="2"
+            v-model="comment"></textarea>    
+        </div>
+        <button class="btn btn-warning mb-4" @click="addCommentToSkyDB">Add comment</button>
+        
+        <div class="media" :key="comment.comment" v-for="comment in this.comments">
+          <img src="../assets/defaultuser.png" class="mr-3" alt="User">
+          <div class="media-body">
+            <p class="mt-0 font-weight-bold">{{comment.userID.slice(0, 25)}}...</p>
+            <p>{{comment.comment}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -34,6 +61,8 @@ export default {
     account: '',
     petFamousBlockchain: null,
     transactionHash: '',
+    comments: [],
+    comment: '',
     error: ''
   }),
   computed: {
@@ -105,6 +134,34 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    async addCommentToSkyDB() {
+      try {
+        let { data, skylink } = await this.skynetClient.db.getJSON(this.publicKey, dataKey);
+        console.log(data, skylink);
+
+        const commentData = {
+          petId: this.$route.params.id,
+          comment: this.comment,
+          date: `${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}`,
+          userID: this.userID
+        };
+
+        this.comments.push(commentData);
+
+        data.comments.push(commentData);
+
+        const json = {
+          pets: data.pets,
+          comments: data.comments
+        };
+
+        await this.skynetClient.db.setJSON(this.privateKey, dataKey, json);
+
+        this.comment = '';
+      } catch (error) {
+        console.log(error);
+      }
     }
   },
   async created() {
@@ -112,6 +169,7 @@ export default {
       const { data, skylink } = await this.skynetClient.db.getJSON(this.publicKey, dataKey);
       console.log(data, skylink);
       this.pet = data.pets[this.$route.params.id];
+      this.comments = data.comments.filter(comment => comment.petId === this.$route.params.id);
     } catch (error) {
       console.log(error);
     }
