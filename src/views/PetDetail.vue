@@ -1,9 +1,17 @@
 <template>
   <div class="container">
+    <div v-show="error" class="alert alert-danger" data-dismiss="alert" role="alert">
+      {{error}}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
     <h1>Pet Detail</h1>
     <img class="img-fluid" v-show="this.pet.imageURL" :src="this.pet.imageURL" alt="Pet">
     <p>{{this.pet.type}}</p>
     <p>Owner {{this.pet.ownerName}}</p>
+    <button class="btn btn-info" @click="likeAPetToSkyDB">{{numberOfLikes}} Likes</button>
+    <div class="my-2"></div>
     <button v-if="!account" class="btn btn-primary" @click="loadWeb3">
       Connect to Wallet to mint NFT
     </button>
@@ -25,9 +33,15 @@ export default {
     pet: {},
     account: '',
     petFamousBlockchain: null,
-    transactionHash: ''
+    transactionHash: '',
+    error: ''
   }),
-  computed: mapState(['skynetClient', 'publicKey']),
+  computed: {
+    ...mapState(['skynetClient', 'publicKey', 'privateKey', 'userID']),
+    numberOfLikes(){
+      return this.pet.likes.length;
+    }
+  },
   methods: {
     async loadWeb3(){
       if (window.ethereum) {
@@ -66,6 +80,31 @@ export default {
         .send({ from: this.account });
       console.log(event);
       this.transactionHash = event.transactionHash;
+    },
+    async likeAPetToSkyDB() {
+      try {
+        let { data, skylink } = await this.skynetClient.db.getJSON(this.publicKey, dataKey);
+        console.log(data, skylink);
+
+        const alreadyLiked = data.pets[this.$route.params.id].likes.includes(this.userID);
+        console.log(alreadyLiked, this.userID);
+
+        if(alreadyLiked) {
+          this.error = "You alreay like this pet";
+          return;
+        }
+        data.pets[this.$route.params.id].likes.push(this.userID);
+
+        const json = {
+          pets: data.pets,
+          petCount: data.petCount
+        };
+
+        const res = await this.skynetClient.db.setJSON(this.privateKey, dataKey, json);
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
     }
   },
   async created() {
