@@ -33,7 +33,11 @@ export default {
     try {
       const { data, skylink } = await this.skynetClient.db.getJSON(this.publicKey, dataKey);
       console.log(data, skylink);
-      this.pets = data.pets;
+      if (data){
+        this.pets = data.pets;
+      } else {
+        this.pets = null;
+      }
     } catch (error) {
       console.log(error);
     }
