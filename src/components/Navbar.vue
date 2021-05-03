@@ -23,10 +23,10 @@
         </ul>
         <ul class="navbar-nav">
           <li v-if="!this.userID" class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show">
-            <span class="nav-link" @click="this.handleMySkyLogin()">Login</span>
+            <span class="btn btn-primary" @click="this.handleMySkyLogin()">Login</span>
           </li>
           <li v-else class="nav-item" data-toggle="collapse" data-target=".navbar-collapse.show">
-            <span class="nav-link" @click="this.handleMySkyLogout()">Logout</span>
+            <span class="btn btn-danger" @click="this.handleMySkyLogout()">Logout</span>
           </li>
         </ul>
       </div>

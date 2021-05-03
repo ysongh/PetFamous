@@ -8,6 +8,13 @@
       </button>
     </div>
 
+    <div v-show="success" class="alert alert-success" data-dismiss="alert" role="alert">
+      {{success}}
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
      <h1>Pet Detail</h1>
 
     <div class="row">
@@ -21,7 +28,10 @@
           Connect to Wallet to mint NFT
         </button>
         <button v-else class="btn btn-primary" @click="mintPetNFT">Mint this Pet NFT</button>
-        <p class="mt-3">{{transactionHash}}</p>
+        <br />
+        <a v-show="transactionHash" :href="'https://explorer-mumbai.maticvigil.com/tx/' + transactionHash" class="mt-3" target="_blank" rel="noopener noreferrer">
+          See Transaction
+        </a>
       </div>
        <div class="col-sm-12 col-md-6">
          <div class="form-group">
@@ -63,7 +73,8 @@ export default {
     transactionHash: '',
     comments: [],
     comment: '',
-    error: ''
+    error: '',
+    success: '',
   }),
   computed: {
     ...mapState(['skynetClient', 'publicKey', 'privateKey', 'userID']),
@@ -131,6 +142,8 @@ export default {
 
         const res = await this.skynetClient.db.setJSON(this.privateKey, dataKey, json);
         console.log(res);
+        this.success = "You liked this pet";
+        this.pet.likes.push(this.userID);
       } catch (error) {
         console.log(error);
       }
@@ -149,7 +162,8 @@ export default {
 
         this.comments.push(commentData);
 
-        data.comments.push(commentData);
+        if(data.comments) data.comments.push(commentData);
+        else data.comments = [commentData];
 
         const json = {
           pets: data.pets,
