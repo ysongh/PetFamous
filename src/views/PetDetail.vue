@@ -23,6 +23,7 @@
         <p>{{this.pet.type}}</p>
         <p>Owner {{this.pet.ownerName}}</p>
         <button class="btn btn-info" @click="likeAPetToSkyDB">{{numberOfLikes}} Likes</button>
+        <button class="btn btn-danger" @click="deletePetFromSkyDB">Delete</button>
         <div class="my-2"></div>
         <button v-if="!account" class="btn btn-primary" @click="loadWeb3">
           Connect to Wallet to mint NFT
@@ -144,6 +145,23 @@ export default {
         console.log(res);
         this.success = "You liked this pet";
         this.pet.likes.push(this.userID);
+      } catch (error) {
+        console.log(error);
+      }
+    },
+     async deletePetFromSkyDB() {
+      try {
+        let { data, skylink } = await this.skynetClient.db.getJSON(this.publicKey, dataKey);
+        console.log(data, skylink);
+
+        let temp = data.pets.filter(pet => pet.id !== +this.$route.params.id);
+        const json = {
+          pets: temp,
+          petCount: data.petCount
+        };
+        const res = await this.skynetClient.db.setJSON(this.privateKey, dataKey, json);
+        console.log(res);
+        this.$router.push('/');
       } catch (error) {
         console.log(error);
       }
