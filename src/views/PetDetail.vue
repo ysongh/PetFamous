@@ -49,7 +49,7 @@
         <div class="media" :key="comment.comment" v-for="comment in this.comments">
           <img src="../assets/defaultuser.png" class="mr-3" alt="User">
           <div class="media-body">
-            <p class="mt-0 font-weight-bold">{{comment.userID.slice(0, 25)}}...</p>
+            <p class="mt-0 font-weight-bold">{{comment.userID || 'Guest'}}</p>
             <p>{{comment.comment}}</p>
           </div>
         </div>
@@ -138,7 +138,8 @@ export default {
 
         const json = {
           pets: data.pets,
-          petCount: data.petCount
+          petCount: data.petCount,
+          comments: data.comments
         };
 
         const res = await this.skynetClient.db.setJSON(this.privateKey, dataKey, json);
