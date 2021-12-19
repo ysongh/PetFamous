@@ -1,17 +1,20 @@
 <template>
   <Navbar></Navbar>
+  <Alert></Alert>
   <router-view/>
   <Footer></Footer>
 </template>
 
 <script>
 import Navbar from './components/Navbar';
+import Alert from './components/common/Alert';
 import Footer from './components/Footer';
 
 export default {
   name: 'App',
   components: {
     Navbar,
+    Alert,
     Footer
   }
 }
