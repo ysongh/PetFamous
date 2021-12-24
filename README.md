@@ -1,7 +1,7 @@
 # Pet Famous
 A photo sharing social network for pets where viewers can earn NFT
 
-- Live Site - https://aaronrasor.hns.siasky.net/
+- Live Site - https://0008rpthm7k9qbb1n1adnbsibj8ravd4g4r73gt2g7gkp4nae75k2ag.siasky.net/#/
 - Demo - https://youtu.be/w3PJzEa2m5Q
 
 ## Features
